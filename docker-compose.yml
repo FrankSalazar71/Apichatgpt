@@ -1,7 +1,7 @@
 services:
   demo-app:
     image: franksalazar45/apichatbot:latest
-    container_name: chatapi
+    container_name: chatapis
     ports:
       - "${PORT:-8080}:8080"
     environment:
