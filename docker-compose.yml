@@ -1,0 +1,12 @@
+services:
+  demo-app:
+    image: franksalazar45/apichatbot:latest
+    container_name: chatapi
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - PORT=8080
+      - MONGODB_URI="mongodb+srv://franksalazar:ZPyOdaFVHyETu9hH@cluster0.8unnc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      - MONGODB_DATABASE="nosql"
+      - RAPIDAPI_URL="https://unexpected-kayle-matichelo11-374caebe.koyeb.app/chatgptru/gpt-4o"
+      - RAPIDAPI_APIKEY="8546fe44a8e843b8b6adb080a1ad44c1"
