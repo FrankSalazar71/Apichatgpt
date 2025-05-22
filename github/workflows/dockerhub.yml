@@ -31,3 +31,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/apichatbot:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/apichatbot:${{ github.sha }}
+
+          # 3. Build y Push con tags latest y SHA...
