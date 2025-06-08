@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ChatbotService } from 'src/app/core/services/chatbot.service.ts';
+import { ChatbotService } from 'src/app/core/services/chatbot.service';
 
 @Component({
   selector: 'app-chat',
