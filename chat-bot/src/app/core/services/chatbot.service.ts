@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PreguntaRespuesta } from '../../interfaces/PreguntaRespuesta';
+import { PreguntaRespuesta } from '../interfaces/pregunta-respuesta.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ChatbotService {
-  private baseUrl = 'http://localhost:8080/api/chatbot';
+  private readonly baseUrl = 'http://localhost:8080/api/chatbot';
 
   constructor(private http: HttpClient) {}
 

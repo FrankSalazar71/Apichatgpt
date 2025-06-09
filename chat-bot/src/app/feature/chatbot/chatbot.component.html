@@ -1,14 +1,31 @@
-<div class="container mt-4">
-  <h2>Chatbot</h2>
-  <div class="mb-3">
-    <label>Pregunta:</label>
-    <input [(ngModel)]="pregunta" class="form-control" placeholder="Escribe tu pregunta" />
-  </div>
-  <button class="btn btn-primary" (click)="enviarPregunta()" [disabled]="cargando">
-    {{ cargando ? 'Preguntando...' : 'Enviar' }}
-  </button>
+<div class="container">
+  <h2>Gestión de Preguntas y Respuestas</h2>
 
-  <div *ngIf="respuesta" class="alert alert-info mt-3">
-    <strong>Respuesta:</strong> {{ respuesta }}
-  </div>
+  <form (ngSubmit)="guardar()">
+    <input [(ngModel)]="nueva.pregunta" name="pregunta" required placeholder="Pregunta" class="form-control mb-2">
+    <textarea [(ngModel)]="nueva.respuesta" name="respuesta" required placeholder="Respuesta" class="form-control mb-2"></textarea>
+    <button type="submit" class="btn btn-success">{{ editando ? 'Actualizar' : 'Registrar' }}</button>
+    <button type="button" class="btn btn-secondary ms-2" (click)="cancelar()">Cancelar</button>
+  </form>
+
+  <hr>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Pregunta</th>
+        <th>Respuesta</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pr of preguntas">
+        <td>{{ pr.pregunta }}</td>
+        <td>{{ pr.respuesta }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="editar(pr)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminar(pr.id!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
