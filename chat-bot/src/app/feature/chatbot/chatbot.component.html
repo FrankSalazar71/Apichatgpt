@@ -1,0 +1,14 @@
+<div class="container mt-4">
+  <h2>Chatbot</h2>
+  <div class="mb-3">
+    <label>Pregunta:</label>
+    <input [(ngModel)]="pregunta" class="form-control" placeholder="Escribe tu pregunta" />
+  </div>
+  <button class="btn btn-primary" (click)="enviarPregunta()" [disabled]="cargando">
+    {{ cargando ? 'Preguntando...' : 'Enviar' }}
+  </button>
+
+  <div *ngIf="respuesta" class="alert alert-info mt-3">
+    <strong>Respuesta:</strong> {{ respuesta }}
+  </div>
+</div>
