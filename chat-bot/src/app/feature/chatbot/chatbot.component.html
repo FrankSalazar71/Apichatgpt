@@ -1,31 +1,54 @@
-<div class="container">
-  <h2>Gestión de Preguntas y Respuestas</h2>
-
-  <form (ngSubmit)="guardar()">
-    <input [(ngModel)]="nueva.pregunta" name="pregunta" required placeholder="Pregunta" class="form-control mb-2">
-    <textarea [(ngModel)]="nueva.respuesta" name="respuesta" required placeholder="Respuesta" class="form-control mb-2"></textarea>
-    <button type="submit" class="btn btn-success">{{ editando ? 'Actualizar' : 'Registrar' }}</button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="cancelar()">Cancelar</button>
+<div class="chatbot-container">
+  <h2 class="chatbot-title">Valle Grancito</h2>
+  <form (ngSubmit)="guardar()" class="chatbot-form">
+    <input [(ngModel)]="nueva.pregunta" name="pregunta" required placeholder="Escribe tu pregunta..." class="chatbot-input">
+    <div class="chatbot-btns">
+      <button type="submit" class="btn btn-success">{{ editando ? 'Actualizar' : 'Preguntar' }}</button>
+      <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
   </form>
 
-  <hr>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Pregunta</th>
-        <th>Respuesta</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let pr of preguntas">
-        <td>{{ pr.pregunta }}</td>
-        <td>{{ pr.respuesta }}</td>
-        <td>
-          <button class="btn btn-warning btn-sm" (click)="editar(pr)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminar(pr.id!)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="nueva.respuesta" class="chatbot-alert">
+    <strong>Respuesta:</strong> {{ nueva.respuesta }}
+  </div>
+
+  <div class="chatbot-toggle">
+    <button class="btn btn-outline-secondary"
+            (click)="mostrarInactivos = !mostrarInactivos">
+      {{ mostrarInactivos ? 'Ver activos' : 'Ver inactivos' }}
+    </button>
+  </div>
+
+  <div class="chatbot-table-wrapper">
+    <table class="chatbot-table">
+      <thead>
+        <tr>
+          <th>Pregunta</th>
+          <th>Respuesta</th>
+          <th style="width: 140px;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pr of preguntasFiltradas">
+          <td>{{ pr.pregunta }}</td>
+          <td>{{ pr.respuesta }}</td>
+          <td class="chatbot-actions">
+  <ng-container *ngIf="!mostrarInactivos">
+    <div class="d-flex gap-2">
+      <button class="btn btn-warning btn-sm" (click)="editar(pr)">Editar</button>
+      <button class="btn btn-danger btn-sm" (click)="eliminar(pr.id!)">Eliminar</button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="mostrarInactivos">
+    <button class="btn btn-info btn-sm" (click)="restaurar(pr.id!)">Restaurar</button>
+  </ng-container>
+</td>
+
+        </tr>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+      </tbody>
+    </table>
+  </div>
 </div>

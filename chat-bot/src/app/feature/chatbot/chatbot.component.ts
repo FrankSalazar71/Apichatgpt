@@ -15,6 +15,7 @@ export class ChatbotComponent implements OnInit {
   preguntas: PreguntaRespuesta[] = [];
   nueva: PreguntaRespuesta = { pregunta: '', respuesta: '', activo: true };
   editando: PreguntaRespuesta | null = null;
+  mostrarInactivos: any;
 
   constructor(private chatbotService: ChatbotService) {}
 
@@ -26,19 +27,45 @@ export class ChatbotComponent implements OnInit {
     this.chatbotService.listar().subscribe(data => this.preguntas = data);
   }
 
-  guardar(): void {
-    if (this.editando) {
-      this.chatbotService.actualizar(this.editando.id!, this.nueva).subscribe(() => {
-        this.cancelar();
-        this.cargarPreguntas();
-      });
-    } else {
-      this.chatbotService.registrar(this.nueva).subscribe(() => {
-        this.cancelar();
-        this.cargarPreguntas();
-      });
-    }
+  // Getter para filtrar preguntas según el estado
+  get preguntasFiltradas(): PreguntaRespuesta[] {
+    return this.mostrarInactivos
+      ? this.preguntas.filter(p => !p.activo)
+      : this.preguntas.filter(p => p.activo);
   }
+
+  guardar(): void {
+  if (this.editando) {
+    // 1. Llama a la IA para obtener la nueva respuesta
+    this.chatbotService.preguntar(this.nueva.pregunta).subscribe(respuesta => {
+      // 2. Actualiza la pregunta y la respuesta en el backend
+      const actualizado: PreguntaRespuesta = {
+        ...this.nueva,
+        respuesta: respuesta
+      };
+      this.chatbotService.actualizar(this.nueva.id!, actualizado).subscribe(() => {
+        this.cargarPreguntas();
+        this.cancelar();
+      });
+    });
+  } else {
+    // Llama a la IA para obtener la respuesta
+    this.chatbotService.preguntar(this.nueva.pregunta).subscribe(respuesta => {
+      // Guarda la pregunta y la respuesta en el backend
+      const registro: PreguntaRespuesta = {
+        pregunta: this.nueva.pregunta,
+        respuesta: respuesta,
+        activo: true
+      };
+      this.chatbotService.registrar(registro).subscribe(() => {
+        this.cargarPreguntas();
+        this.nueva = { pregunta: '', respuesta: '', activo: true };
+      });
+      // Muestra la respuesta en pantalla
+      this.nueva.respuesta = respuesta;
+    });
+  }
+}
 
   editar(pr: PreguntaRespuesta): void {
     this.editando = pr;
@@ -57,4 +84,8 @@ export class ChatbotComponent implements OnInit {
   restaurar(id: string): void {
     this.chatbotService.restaurar(id).subscribe(() => this.cargarPreguntas());
   }
+
+ 
+
 }
+
